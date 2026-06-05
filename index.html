@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline Demo — Reveal.js</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+  <style>
+    :root {
+      --accent: #e67e22;
+      --accent2: #3498db;
+      --line: rgba(255,255,255,0.15);
+    }
+
+    /* ── Title slide ── */
+    .title-slide h1 { font-size: 2.2em; margin-bottom: 0.2em; }
+    .title-slide p  { color: #aaa; font-size: 0.9em; }
+
+    /* ── Vertical timeline (single column) ── */
+    .timeline {
+      position: relative;
+      padding: 0 0 0 2.4em;
+      list-style: none;
+      text-align: left;
+      font-size: 0.78em;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.6em; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--line);
+      border-radius: 2px;
+    }
+    .timeline li {
+      position: relative;
+      margin-bottom: 1.6em;
+      padding-left: 0.6em;
+    }
+    .timeline li::before {
+      content: '';
+      position: absolute;
+      left: -1.9em; top: 0.35em;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid #1a1a1a;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .timeline .year {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.05em 0.5em;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+      font-size: 0.85em;
+    }
+    .timeline .event-title { font-weight: 600; margin: 0; font-size: 1em; }
+    .timeline .desc { color: #bbb; margin: 0.2em 0 0; }
+
+    /* ── Horizontal timeline ── */
+    .h-timeline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      padding-top: 3em;
+      font-size: 0.7em;
+      gap: 0;
+    }
+    .h-timeline::before {
+      content: '';
+      position: absolute;
+      top: 1.3em; left: 2.5em; right: 2.5em;
+      height: 3px;
+      background: var(--line);
+    }
+    .h-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .h-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent2);
+      border: 3px solid #1a1a1a;
+      box-shadow: 0 0 0 2px var(--accent2);
+      margin-bottom: 0.6em;
+    }
+    .h-item:nth-child(odd) .h-dot  { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+    .h-year  { font-weight: 700; margin-bottom: 0.3em; color: var(--accent2); }
+    .h-item:nth-child(odd) .h-year { color: var(--accent); }
+    .h-label { text-align: center; color: #ccc; max-width: 110px; }
+
+    /* ── Animated progress bar timeline ── */
+    .progress-tl { list-style: none; padding: 0; font-size: 0.8em; }
+    .progress-tl li { margin-bottom: 1.2em; }
+    .progress-tl .phase { display: flex; justify-content: space-between; margin-bottom: 0.3em; }
+    .progress-tl .phase span:last-child { color: #aaa; font-size: 0.85em; }
+    .bar-track {
+      height: 8px; border-radius: 4px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 4px;
+      transition: width 1.2s ease;
+    }
+    .bar-fill.c1 { background: linear-gradient(90deg, #e67e22, #f39c12); }
+    .bar-fill.c2 { background: linear-gradient(90deg, #3498db, #2ecc71); }
+    .bar-fill.c3 { background: linear-gradient(90deg, #9b59b6, #3498db); }
+    .bar-fill.c4 { background: linear-gradient(90deg, #e74c3c, #e67e22); }
+
+    /* ── Milestone cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8em;
+      font-size: 0.72em;
+      text-align: left;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 0.8em 1em;
+    }
+    .card:nth-child(even) { border-left-color: var(--accent2); }
+    .card .tag  { font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.3em; }
+    .card:nth-child(even) .tag { color: var(--accent2); }
+    .card h4    { margin: 0 0 0.3em; font-size: 1em; }
+    .card p     { margin: 0; color: #bbb; }
+
+    /* fragment fade helpers */
+    .reveal .slides section .fragment.highlight-current-step.current-fragment { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- ① Title -->
+    <section class="title-slide" data-background-gradient="radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 50%, #0f3460 100%)">
+      <h1>Timeline Layouts</h1>
+      <h3 style="color:var(--accent)">with Reveal.js</h3>
+      <p>Four ways to tell a story through time</p>
+      <p style="margin-top:2em;font-size:0.6em;color:#555">Press <kbd style="background:#333;border:1px solid #555;padding:0.1em 0.4em;border-radius:3px;">→</kbd> or <kbd style="background:#333;border:1px solid #555;padding:0.1em 0.4em;border-radius:3px;">Space</kbd> to advance</p>
+    </section>
+
+    <!-- ② Vertical timeline -->
+    <section>
+      <h2>Vertical Timeline</h2>
+      <p style="color:#aaa;font-size:0.7em">Classic single-column chronology — great for step-by-step narratives</p>
+      <ul class="timeline">
+        <li class="fragment fade-up">
+          <span class="year">1991</span>
+          <p class="event-title">World Wide Web goes public</p>
+          <p class="desc">Tim Berners-Lee releases the first web browser and server.</p>
+        </li>
+        <li class="fragment fade-up">
+          <span class="year">1995</span>
+          <p class="event-title">JavaScript is born</p>
+          <p class="desc">Brendan Eich creates the language in 10 days at Netscape.</p>
+        </li>
+        <li class="fragment fade-up">
+          <span class="year">2008</span>
+          <p class="event-title">V8 engine & Node.js foundations</p>
+          <p class="desc">Google ships V8, enabling server-side JavaScript by 2009.</p>
+        </li>
+        <li class="fragment fade-up">
+          <span class="year">2015</span>
+          <p class="event-title">ES6 — the modern era</p>
+          <p class="desc">Arrow functions, classes, modules, and promises land in the spec.</p>
+        </li>
+        <li class="fragment fade-up">
+          <span class="year">2024</span>
+          <p class="event-title">Edge AI & Baseline everywhere</p>
+          <p class="desc">LLMs run in the browser; the Web Platform Baseline matures.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ③ Horizontal timeline -->
+    <section>
+      <h2>Horizontal Timeline</h2>
+      <p style="color:#aaa;font-size:0.7em">Good for fewer events; keeps everything in view at once</p>
+      <div class="h-timeline">
+        <div class="h-item fragment fade-down">
+          <div class="h-dot"></div>
+          <div class="h-year">Q1</div>
+          <div class="h-label">Discovery &amp; Research</div>
+        </div>
+        <div class="h-item fragment fade-down" data-fragment-index="2">
+          <div class="h-dot"></div>
+          <div class="h-year">Q2</div>
+          <div class="h-label">Prototype &amp; Validate</div>
+        </div>
+        <div class="h-item fragment fade-down" data-fragment-index="3">
+          <div class="h-dot"></div>
+          <div class="h-year">Q3</div>
+          <div class="h-label">Build &amp; Iterate</div>
+        </div>
+        <div class="h-item fragment fade-down" data-fragment-index="4">
+          <div class="h-dot"></div>
+          <div class="h-year">Q4</div>
+          <div class="h-label">Launch &amp; Scale</div>
+        </div>
+        <div class="h-item fragment fade-down" data-fragment-index="5">
+          <div class="h-dot"></div>
+          <div class="h-year">Q5</div>
+          <div class="h-label">Grow &amp; Retain</div>
+        </div>
+      </div>
+      <p class="fragment" data-fragment-index="6" style="margin-top:2em;font-size:0.65em;color:#888">
+        Tip: combine with Reveal's <code>data-auto-animate</code> to animate the line drawing in.
+      </p>
+    </section>
+
+    <!-- ④ Progress bar timeline -->
+    <section>
+      <h2>Progress Timeline</h2>
+      <p style="color:#aaa;font-size:0.7em">Show phase durations at a glance — ideal for project roadmaps</p>
+      <ul class="progress-tl">
+        <li class="fragment fade-right">
+          <div class="phase"><span>Phase 1 — Inception</span><span>Jan – Feb</span></div>
+          <div class="bar-track"><div class="bar-fill c1" style="width:20%"></div></div>
+        </li>
+        <li class="fragment fade-right">
+          <div class="phase"><span>Phase 2 — Design</span><span>Mar – May</span></div>
+          <div class="bar-track"><div class="bar-fill c2" style="width:45%"></div></div>
+        </li>
+        <li class="fragment fade-right">
+          <div class="phase"><span>Phase 3 — Development</span><span>Jun – Sep</span></div>
+          <div class="bar-track"><div class="bar-fill c3" style="width:75%"></div></div>
+        </li>
+        <li class="fragment fade-right">
+          <div class="phase"><span>Phase 4 — Launch</span><span>Oct – Dec</span></div>
+          <div class="bar-track"><div class="bar-fill c4" style="width:100%"></div></div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ⑤ Milestone cards -->
+    <section>
+      <h2>Milestone Cards</h2>
+      <p style="color:#aaa;font-size:0.7em">A grid of cards gives equal visual weight to each event</p>
+      <div class="cards">
+        <div class="card fragment zoom-in">
+          <div class="tag">Week 1</div>
+          <h4>Kick-off</h4>
+          <p>Align on goals, define success metrics, assign owners.</p>
+        </div>
+        <div class="card fragment zoom-in">
+          <div class="tag">Week 3</div>
+          <h4>First Prototype</h4>
+          <p>Click-through mockup shared with stakeholders for feedback.</p>
+        </div>
+        <div class="card fragment zoom-in">
+          <div class="tag">Week 6</div>
+          <h4>Beta Release</h4>
+          <p>Internal dogfooding begins; bug bash and load testing.</p>
+        </div>
+        <div class="card fragment zoom-in">
+          <div class="tag">Week 10</div>
+          <h4>GA Launch</h4>
+          <p>Public release with feature flags, rollout monitoring active.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ Tips / outro -->
+    <section data-background-gradient="radial-gradient(ellipse at bottom, #0f3460 0%, #16213e 60%, #1a1a2e 100%)">
+      <h2>Tips for Timeline Slides</h2>
+      <ul style="font-size:0.78em;line-height:1.9">
+        <li class="fragment">Use <code>fragment</code> classes to reveal events one at a time</li>
+        <li class="fragment">Use <code>data-auto-animate</code> to smoothly grow the connecting line</li>
+        <li class="fragment">Keep labels short — the slide is not a document</li>
+        <li class="fragment">Choose <strong>vertical</strong> for depth, <strong>horizontal</strong> for brevity</li>
+        <li class="fragment">Progress bars work well for Gantt-style roadmaps</li>
+      </ul>
+      <p class="fragment" style="margin-top:1.5em;color:var(--accent);font-size:0.85em">
+        Built with <a href="https://revealjs.com" style="color:inherit">Reveal.js</a> — open-source HTML presentation framework
+      </p>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    backgroundTransition: 'fade',
+    controls: true,
+    progress: true,
+    center: true,
+    width: 960,
+    height: 700,
+  });
+</script>
+</body>
+</html>
