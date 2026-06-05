@@ -3,293 +3,265 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timeline Demo — Reveal.js</title>
+  <title>Hello Dian</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
   <style>
     :root {
-      --accent: #e67e22;
-      --accent2: #3498db;
-      --line: rgba(255,255,255,0.15);
+      --rose:  #c0392b;
+      --warm:  #e67e22;
+      --sage:  #27ae60;
+      --sky:   #2980b9;
+      --soft:  #fff9f5;
     }
 
-    /* ── Title slide ── */
-    .title-slide h1 { font-size: 2.2em; margin-bottom: 0.2em; }
-    .title-slide p  { color: #aaa; font-size: 0.9em; }
+    /* Larger base font for easy reading */
+    .reveal { font-family: Georgia, serif; font-size: 38px; color: #333; }
+    .reveal h1, .reveal h2, .reveal h3 { font-family: Georgia, serif; }
+    .reveal p, .reveal li { line-height: 1.7; }
 
-    /* ── Vertical timeline (single column) ── */
+    /* ── Nav instructions box ── */
+    .nav-box {
+      display: inline-flex;
+      gap: 1.2em;
+      background: #f5ece6;
+      border: 1px solid #e8d5c4;
+      border-radius: 8px;
+      padding: 0.5em 1.2em;
+      font-size: 0.52em;
+      font-family: sans-serif;
+      color: #555;
+      margin-top: 1.2em;
+    }
+    .nav-box .arrow { font-size: 1.3em; vertical-align: middle; }
+
+    /* ── Vertical timeline ── */
     .timeline {
       position: relative;
       padding: 0 0 0 2.4em;
       list-style: none;
       text-align: left;
-      font-size: 0.78em;
+      font-size: 0.72em;
     }
     .timeline::before {
       content: '';
       position: absolute;
-      left: 0.6em; top: 0; bottom: 0;
+      left: 0.62em; top: 0; bottom: 0;
       width: 3px;
-      background: var(--line);
+      background: #e8d5c4;
       border-radius: 2px;
     }
     .timeline li {
       position: relative;
-      margin-bottom: 1.6em;
-      padding-left: 0.6em;
+      margin-bottom: 1.3em;
+      padding-left: 0.4em;
     }
     .timeline li::before {
       content: '';
       position: absolute;
-      left: -1.9em; top: 0.35em;
+      left: -1.92em; top: 0.38em;
       width: 14px; height: 14px;
       border-radius: 50%;
-      background: var(--accent);
-      border: 3px solid #1a1a1a;
-      box-shadow: 0 0 0 2px var(--accent);
+      background: var(--rose);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px var(--rose);
     }
     .timeline .year {
       display: inline-block;
-      background: var(--accent);
+      background: var(--rose);
       color: #fff;
       border-radius: 4px;
-      padding: 0.05em 0.5em;
+      padding: 0.05em 0.55em;
       font-weight: 700;
       margin-bottom: 0.2em;
-      font-size: 0.85em;
+      font-size: 0.8em;
+      font-family: sans-serif;
     }
-    .timeline .event-title { font-weight: 600; margin: 0; font-size: 1em; }
-    .timeline .desc { color: #bbb; margin: 0.2em 0 0; }
+    .timeline.son   li::before { background: var(--sky); box-shadow: 0 0 0 2px var(--sky); }
+    .timeline.son   .year      { background: var(--sky); }
+    .timeline.daughter li::before { background: var(--sage); box-shadow: 0 0 0 2px var(--sage); }
+    .timeline.daughter .year      { background: var(--sage); }
 
-    /* ── Horizontal timeline ── */
-    .h-timeline {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      position: relative;
-      padding-top: 3em;
-      font-size: 0.7em;
-      gap: 0;
-    }
-    .h-timeline::before {
-      content: '';
-      position: absolute;
-      top: 1.3em; left: 2.5em; right: 2.5em;
-      height: 3px;
-      background: var(--line);
-    }
-    .h-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      position: relative;
-    }
-    .h-dot {
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--accent2);
-      border: 3px solid #1a1a1a;
-      box-shadow: 0 0 0 2px var(--accent2);
-      margin-bottom: 0.6em;
-    }
-    .h-item:nth-child(odd) .h-dot  { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-    .h-year  { font-weight: 700; margin-bottom: 0.3em; color: var(--accent2); }
-    .h-item:nth-child(odd) .h-year { color: var(--accent); }
-    .h-label { text-align: center; color: #ccc; max-width: 110px; }
+    .timeline .event-title { font-weight: 700; margin: 0; color: #222; }
+    .timeline .desc        { color: #666; margin: 0.15em 0 0; font-style: italic; }
 
-    /* ── Animated progress bar timeline ── */
-    .progress-tl { list-style: none; padding: 0; font-size: 0.8em; }
-    .progress-tl li { margin-bottom: 1.2em; }
-    .progress-tl .phase { display: flex; justify-content: space-between; margin-bottom: 0.3em; }
-    .progress-tl .phase span:last-child { color: #aaa; font-size: 0.85em; }
-    .bar-track {
-      height: 8px; border-radius: 4px;
-      background: rgba(255,255,255,0.1);
-      overflow: hidden;
+    /* ── Down-arrow hint (for vertical slides) ── */
+    .down-hint {
+      margin-top: 1.2em;
+      font-size: 0.5em;
+      font-family: sans-serif;
+      color: #aaa;
     }
-    .bar-fill {
-      height: 100%; border-radius: 4px;
-      transition: width 1.2s ease;
-    }
-    .bar-fill.c1 { background: linear-gradient(90deg, #e67e22, #f39c12); }
-    .bar-fill.c2 { background: linear-gradient(90deg, #3498db, #2ecc71); }
-    .bar-fill.c3 { background: linear-gradient(90deg, #9b59b6, #3498db); }
-    .bar-fill.c4 { background: linear-gradient(90deg, #e74c3c, #e67e22); }
-
-    /* ── Milestone cards ── */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.8em;
-      font-size: 0.72em;
-      text-align: left;
-    }
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-left: 4px solid var(--accent);
-      border-radius: 6px;
-      padding: 0.8em 1em;
-    }
-    .card:nth-child(even) { border-left-color: var(--accent2); }
-    .card .tag  { font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.3em; }
-    .card:nth-child(even) .tag { color: var(--accent2); }
-    .card h4    { margin: 0 0 0.3em; font-size: 1em; }
-    .card p     { margin: 0; color: #bbb; }
-
-    /* fragment fade helpers */
-    .reveal .slides section .fragment.highlight-current-step.current-fragment { opacity: 1; }
+    .down-hint span { font-size: 1.6em; display: block; animation: bounce 1.4s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
   </style>
 </head>
 <body>
 <div class="reveal">
   <div class="slides">
 
-    <!-- ① Title -->
-    <section class="title-slide" data-background-gradient="radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 50%, #0f3460 100%)">
-      <h1 style="font-size:2.8em;margin-bottom:0.1em">Hello Dian!</h1>
-      <h2 style="color:var(--accent);font-size:1.3em;margin-bottom:0.6em">Welcome to Timeline Layouts</h2>
-      <h3 style="color:#ccc;font-weight:normal;font-size:0.9em">with Reveal.js</h3>
-      <p>Four ways to tell a story through time</p>
-      <p style="margin-top:2em;font-size:0.6em;color:#555">Press <kbd style="background:#333;border:1px solid #555;padding:0.1em 0.4em;border-radius:3px;">→</kbd> or <kbd style="background:#333;border:1px solid #555;padding:0.1em 0.4em;border-radius:3px;">Space</kbd> to advance</p>
-    </section>
-
-    <!-- ② Vertical timeline -->
-    <section>
-      <h2>Vertical Timeline</h2>
-      <p style="color:#aaa;font-size:0.7em">Classic single-column chronology — great for step-by-step narratives</p>
-      <ul class="timeline">
-        <li class="fragment fade-up">
-          <span class="year">1991</span>
-          <p class="event-title">World Wide Web goes public</p>
-          <p class="desc">Tim Berners-Lee releases the first web browser and server.</p>
-        </li>
-        <li class="fragment fade-up">
-          <span class="year">1995</span>
-          <p class="event-title">JavaScript is born</p>
-          <p class="desc">Brendan Eich creates the language in 10 days at Netscape.</p>
-        </li>
-        <li class="fragment fade-up">
-          <span class="year">2008</span>
-          <p class="event-title">V8 engine & Node.js foundations</p>
-          <p class="desc">Google ships V8, enabling server-side JavaScript by 2009.</p>
-        </li>
-        <li class="fragment fade-up">
-          <span class="year">2015</span>
-          <p class="event-title">ES6 — the modern era</p>
-          <p class="desc">Arrow functions, classes, modules, and promises land in the spec.</p>
-        </li>
-        <li class="fragment fade-up">
-          <span class="year">2024</span>
-          <p class="event-title">Edge AI & Baseline everywhere</p>
-          <p class="desc">LLMs run in the browser; the Web Platform Baseline matures.</p>
-        </li>
-      </ul>
-    </section>
-
-    <!-- ③ Horizontal timeline -->
-    <section>
-      <h2>Horizontal Timeline</h2>
-      <p style="color:#aaa;font-size:0.7em">Good for fewer events; keeps everything in view at once</p>
-      <div class="h-timeline">
-        <div class="h-item fragment fade-down">
-          <div class="h-dot"></div>
-          <div class="h-year">Q1</div>
-          <div class="h-label">Discovery &amp; Research</div>
-        </div>
-        <div class="h-item fragment fade-down" data-fragment-index="2">
-          <div class="h-dot"></div>
-          <div class="h-year">Q2</div>
-          <div class="h-label">Prototype &amp; Validate</div>
-        </div>
-        <div class="h-item fragment fade-down" data-fragment-index="3">
-          <div class="h-dot"></div>
-          <div class="h-year">Q3</div>
-          <div class="h-label">Build &amp; Iterate</div>
-        </div>
-        <div class="h-item fragment fade-down" data-fragment-index="4">
-          <div class="h-dot"></div>
-          <div class="h-year">Q4</div>
-          <div class="h-label">Launch &amp; Scale</div>
-        </div>
-        <div class="h-item fragment fade-down" data-fragment-index="5">
-          <div class="h-dot"></div>
-          <div class="h-year">Q5</div>
-          <div class="h-label">Grow &amp; Retain</div>
-        </div>
-      </div>
-      <p class="fragment" data-fragment-index="6" style="margin-top:2em;font-size:0.65em;color:#888">
-        Tip: combine with Reveal's <code>data-auto-animate</code> to animate the line drawing in.
+    <!-- ═══ SLIDE 1 — Welcome ═══ -->
+    <section data-background-color="#fff9f5">
+      <h1 style="color:var(--rose);font-size:1.5em">Hello Dian! 💐</h1>
+      <p style="font-size:0.75em;color:#555">
+        Your child made this just for you.<br>
+        It's a <strong>slideshow</strong> — like a photo album, but on a screen.
       </p>
-    </section>
-
-    <!-- ④ Progress bar timeline -->
-    <section>
-      <h2>Progress Timeline</h2>
-      <p style="color:#aaa;font-size:0.7em">Show phase durations at a glance — ideal for project roadmaps</p>
-      <ul class="progress-tl">
-        <li class="fragment fade-right">
-          <div class="phase"><span>Phase 1 — Inception</span><span>Jan – Feb</span></div>
-          <div class="bar-track"><div class="bar-fill c1" style="width:20%"></div></div>
-        </li>
-        <li class="fragment fade-right">
-          <div class="phase"><span>Phase 2 — Design</span><span>Mar – May</span></div>
-          <div class="bar-track"><div class="bar-fill c2" style="width:45%"></div></div>
-        </li>
-        <li class="fragment fade-right">
-          <div class="phase"><span>Phase 3 — Development</span><span>Jun – Sep</span></div>
-          <div class="bar-track"><div class="bar-fill c3" style="width:75%"></div></div>
-        </li>
-        <li class="fragment fade-right">
-          <div class="phase"><span>Phase 4 — Launch</span><span>Oct – Dec</span></div>
-          <div class="bar-track"><div class="bar-fill c4" style="width:100%"></div></div>
-        </li>
-      </ul>
-    </section>
-
-    <!-- ⑤ Milestone cards -->
-    <section>
-      <h2>Milestone Cards</h2>
-      <p style="color:#aaa;font-size:0.7em">A grid of cards gives equal visual weight to each event</p>
-      <div class="cards">
-        <div class="card fragment zoom-in">
-          <div class="tag">Week 1</div>
-          <h4>Kick-off</h4>
-          <p>Align on goals, define success metrics, assign owners.</p>
-        </div>
-        <div class="card fragment zoom-in">
-          <div class="tag">Week 3</div>
-          <h4>First Prototype</h4>
-          <p>Click-through mockup shared with stakeholders for feedback.</p>
-        </div>
-        <div class="card fragment zoom-in">
-          <div class="tag">Week 6</div>
-          <h4>Beta Release</h4>
-          <p>Internal dogfooding begins; bug bash and load testing.</p>
-        </div>
-        <div class="card fragment zoom-in">
-          <div class="tag">Week 10</div>
-          <h4>GA Launch</h4>
-          <p>Public release with feature flags, rollout monitoring active.</p>
-        </div>
+      <p style="font-size:0.75em;color:#555;margin-top:0.6em">
+        Today it shows you something called a <strong>timeline</strong> —<br>
+        a lovely way to tell a story from start to finish.
+      </p>
+      <div class="nav-box">
+        <span><span class="arrow">→</span> Press the <strong>right arrow</strong> (or Space bar) to go to the next slide</span>
+        <span><span class="arrow">←</span> Press the <strong>left arrow</strong> to go back</span>
       </div>
     </section>
 
-    <!-- ⑥ Tips / outro -->
-    <section data-background-gradient="radial-gradient(ellipse at bottom, #0f3460 0%, #16213e 60%, #1a1a2e 100%)">
-      <h2>Tips for Timeline Slides</h2>
-      <ul style="font-size:0.78em;line-height:1.9">
-        <li class="fragment">Use <code>fragment</code> classes to reveal events one at a time</li>
-        <li class="fragment">Use <code>data-auto-animate</code> to smoothly grow the connecting line</li>
-        <li class="fragment">Keep labels short — the slide is not a document</li>
-        <li class="fragment">Choose <strong>vertical</strong> for depth, <strong>horizontal</strong> for brevity</li>
-        <li class="fragment">Progress bars work well for Gantt-style roadmaps</li>
-      </ul>
-      <p class="fragment" style="margin-top:1.5em;color:var(--accent);font-size:0.85em">
-        Built with <a href="https://revealjs.com" style="color:inherit">Reveal.js</a> — open-source HTML presentation framework
+    <!-- ═══ SLIDE 2 — What is a timeline? ═══ -->
+    <section data-background-color="#fff9f5">
+      <h2>What Is a Timeline? 🕰️</h2>
+      <p style="font-size:0.7em;color:#555">
+        A timeline puts life's moments in order —<br>
+        oldest first, newest last — so you can see the whole journey at once.
       </p>
+      <ul style="font-size:0.72em;line-height:1.9;color:#444;margin-top:0.5em">
+        <li class="fragment">Think of it like a <strong>family scrapbook</strong>, laid out in a line</li>
+        <li class="fragment">Each dot or card is one important moment</li>
+        <li class="fragment">You can use it for family history, a recipe, a holiday plan…</li>
+        <li class="fragment">…or just to <strong>celebrate someone's life</strong> 💛</li>
+      </ul>
+      <p class="fragment" style="font-size:0.6em;color:#aaa;font-family:sans-serif;margin-top:0.8em">
+        Press Space or → to keep going
+      </p>
+    </section>
+
+    <!-- ═══ SLIDES 3 — Her Son (vertical stack) ═══ -->
+    <section data-background-color="#eaf4fb">
+
+      <!-- 3a — intro card -->
+      <section data-background-color="#eaf4fb">
+        <h2 style="color:var(--sky)">Your Son's Story 👦➡️👨</h2>
+        <p style="font-size:0.7em;color:#555">
+          Here's a timeline of his life's big moments.<br>
+          Each one will appear as you press <strong>Space</strong>.
+        </p>
+        <p style="font-size:0.7em;color:#555;margin-top:0.6em">
+          When you're done with this page,<br>
+          press <strong>→</strong> to move on to your daughter's story.
+        </p>
+        <div class="down-hint">
+          <span>↓</span>
+          Press the <strong>down arrow ↓</strong> (or Space) to begin his timeline
+        </div>
+      </section>
+
+      <!-- 3b — son's timeline -->
+      <section data-background-color="#eaf4fb">
+        <h3 style="color:var(--sky);font-size:0.9em;margin-bottom:0.5em">His Journey</h3>
+        <ul class="timeline son">
+          <li class="fragment fade-up">
+            <span class="year">Born</span>
+            <p class="event-title">He arrives — and changes everything</p>
+            <p class="desc">Tiny fingers, big lungs, and your whole heart gone in an instant.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">First Day of School</span>
+            <p class="event-title">The backpack was almost bigger than him</p>
+            <p class="desc">You cried at the gate. He didn't look back. (He was fine.)</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">Driving Lessons</span>
+            <p class="event-title">White knuckles for both of you</p>
+            <p class="desc">He passed. You survived. Barely.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">Left Home</span>
+            <p class="event-title">An empty bedroom — and a full heart</p>
+            <p class="desc">You kept his room exactly the same. He noticed.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">Today</span>
+            <p class="event-title">Grown up, but still your boy</p>
+            <p class="desc">Still calls on Sundays. Still loves your cooking best.</p>
+          </li>
+        </ul>
+        <p style="font-size:0.5em;color:#aaa;font-family:sans-serif;margin-top:0.6em">Press → to see your daughter's story</p>
+      </section>
+
+    </section>
+
+    <!-- ═══ SLIDES 4 — Her Daughter (vertical stack) ═══ -->
+    <section data-background-color="#f0faf4">
+
+      <!-- 4a — intro card -->
+      <section data-background-color="#f0faf4">
+        <h2 style="color:var(--sage)">Your Daughter's Story 👧➡️👩</h2>
+        <p style="font-size:0.7em;color:#555">
+          Now it's her turn.<br>
+          Press <strong>Space</strong> to reveal each moment of her life.
+        </p>
+        <p style="font-size:0.7em;color:#555;margin-top:0.6em">
+          When finished, press <strong>→</strong> to see the next section.
+        </p>
+        <div class="down-hint">
+          <span>↓</span>
+          Press <strong>↓</strong> or Space to begin her timeline
+        </div>
+      </section>
+
+      <!-- 4b — daughter's timeline -->
+      <section data-background-color="#f0faf4">
+        <h3 style="color:var(--sage);font-size:0.9em;margin-bottom:0.5em">Her Journey</h3>
+        <ul class="timeline daughter">
+          <li class="fragment fade-up">
+            <span class="year">Born</span>
+            <p class="event-title">She arrives — your little girl</p>
+            <p class="desc">Curls, giggles, and an opinion on everything from day one.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">First Recital</span>
+            <p class="event-title">The whole front row was family</p>
+            <p class="desc">She forgot two lines and carried on as if nothing happened.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">School Graduation</span>
+            <p class="event-title">Cap, gown, and a speech that made you cry</p>
+            <p class="desc">You framed the photo. It's still on the wall.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">Her Own Home</span>
+            <p class="event-title">You helped her pick the curtains</p>
+            <p class="desc">She changed them six months later. You said nothing.</p>
+          </li>
+          <li class="fragment fade-up">
+            <span class="year">Today</span>
+            <p class="event-title">Strong, kind, and just like you</p>
+            <p class="desc">She rings when something goes wrong — and when things go right.</p>
+          </li>
+        </ul>
+        <p style="font-size:0.5em;color:#aaa;font-family:sans-serif;margin-top:0.6em">Press → to continue</p>
+      </section>
+
+    </section>
+
+    <!-- ═══ SLIDE 5 — Closing ═══ -->
+    <section data-background-color="#fff0eb">
+      <h2 style="color:var(--rose)">Made with love, Dian 💌</h2>
+      <p style="font-size:0.75em;color:#555;margin-top:0.6em">
+        This kind of slideshow can be about <em>anything</em> —<br>
+        a family history, a holiday, a favourite recipe.
+      </p>
+      <p style="font-size:0.75em;color:#555;margin-top:0.6em">
+        And it lives on the internet, so anyone in the family<br>
+        can open it on their phone or computer — any time.
+      </p>
+      <p class="fragment" style="font-size:0.9em;color:var(--rose);font-style:italic;margin-top:1.2em">
+        Hope you enjoyed it. 💐
+      </p>
+      <div class="nav-box" style="margin-top:1em">
+        <span><span class="arrow">←</span> Press <strong>←</strong> to go back and read it again</span>
+      </div>
     </section>
 
   </div>
@@ -302,7 +274,8 @@
     slideNumber: 'c/t',
     transition: 'slide',
     backgroundTransition: 'fade',
-    controls: true,
+    controls: true,          // always show arrow controls on screen
+    controlsTutorial: true,  // highlight arrows on first visit
     progress: true,
     center: true,
     width: 960,
